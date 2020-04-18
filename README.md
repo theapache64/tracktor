@@ -1,8 +1,9 @@
-![inspiration](extras/dog_stalks_cat.gif)
-
 # tracktor 🐶
 
-A GitHub user tracking app, inspired from the above GIF 🤷
+A GitHub user tracking app, inspired from the below GIF 🤷
+<p align="center">
+<img src="extras/dog_stalks_cat.gif"/>
+</p>
 
 ## Project Status 🚧
 
