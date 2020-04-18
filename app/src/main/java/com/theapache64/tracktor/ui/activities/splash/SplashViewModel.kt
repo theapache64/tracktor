@@ -3,7 +3,7 @@ package com.theapache64.tracktor.ui.activities.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.theapache64.tracktor.BuildConfig
-import com.theapache64.tracktor.ui.activities.main.UsersActivity
+import com.theapache64.tracktor.ui.activities.users.UsersActivity
 import com.theapache64.twinkill.utils.livedata.SingleLiveEvent
 import javax.inject.Inject
 

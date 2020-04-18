@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.theapache64.tracktor.R
 import com.theapache64.tracktor.databinding.ActivitySplashBinding
-import com.theapache64.tracktor.ui.activities.main.UsersActivity
+import com.theapache64.tracktor.ui.activities.users.UsersActivity
 import com.theapache64.twinkill.ui.activities.base.BaseAppCompatActivity
 import com.theapache64.twinkill.utils.extensions.bindContentView
 import dagger.android.AndroidInjection

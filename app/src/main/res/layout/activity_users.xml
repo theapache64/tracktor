@@ -43,10 +43,10 @@
 
         <variable
             name="viewModel"
-            type="com.theapache64.tracktor.ui.activities.main.UsersViewModel" />
+            type="com.theapache64.tracktor.ui.activities.users.UsersViewModel" />
 
         <variable
             name="handler"
-            type="com.theapache64.tracktor.ui.activities.main.UsersHandler" />
+            type="com.theapache64.tracktor.ui.activities.users.UsersHandler" />
     </data>
 </layout>

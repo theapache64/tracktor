@@ -1,7 +1,7 @@
 package com.theapache64.tracktor.di.modules
 
 
-import com.theapache64.tracktor.ui.activities.main.UsersActivity
+import com.theapache64.tracktor.ui.activities.users.UsersActivity
 import com.theapache64.tracktor.ui.activities.splash.SplashActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.activities.main.UsersActivity"
+        tools:context=".ui.activities.users.UsersActivity"
         tools:showIn="@layout/activity_users">
 
         <TextView
@@ -25,10 +25,10 @@
 
         <variable
             name="viewModel"
-            type="com.theapache64.tracktor.ui.activities.main.UsersViewModel" />
+            type="com.theapache64.tracktor.ui.activities.users.UsersViewModel" />
 
         <variable
             name="handler"
-            type="com.theapache64.tracktor.ui.activities.main.UsersHandler" />
+            type="com.theapache64.tracktor.ui.activities.users.UsersHandler" />
     </data>
 </layout>

@@ -1,7 +1,7 @@
 package com.theapache64.tracktor.di.modules
 
 import androidx.lifecycle.ViewModel
-import com.theapache64.tracktor.ui.activities.main.UsersViewModel
+import com.theapache64.tracktor.ui.activities.users.UsersViewModel
 import com.theapache64.tracktor.ui.activities.splash.SplashViewModel
 import com.theapache64.twinkill.di.modules.BaseViewModelModule
 import com.theapache64.twinkill.utils.viewmodel.ViewModelKey
