@@ -1,0 +1,13 @@
+{
+  "name": "Tracktor",
+  "dir": "/home/theapache64/Documents/projects/tracktor",
+  "packageName": "com.theapache64.tracktor",
+  "architecture": 1,
+  "isNeedGoogleFontsModule": true,
+  "isNeedNetworkModule": true,
+  "baseUrl": "https://api.github.com/",
+  "isNeedRoomSupport": true,
+  "isNeedSplashScreen": true,
+  "isNeedLogInScreen": false,
+  "newMainName": "UsersActivity"
+}
