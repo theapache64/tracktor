@@ -257,6 +257,12 @@ This project follows the famous MVVM architecture and best practices from Google
 - 🖌️ Design inspired from [AnimeXStream](https://github.com/mukul500/AnimeXStream) 
 - 💽 Data from [GitHub API v3](https://developer.github.com/v3/)
 
+## TODO 🗒️
+
+- [ ] Support more GitHub events
+- [ ] Add more test cases
+
+
 ## Author ✍️
 
 - theapache64
