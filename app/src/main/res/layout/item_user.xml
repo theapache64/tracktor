@@ -32,7 +32,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/sample_user_avatar" />
+                tools:src="@tools:sample/avatars"
+                />
 
             <!--Name-->
             <TextView

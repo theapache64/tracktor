@@ -40,7 +40,7 @@
             android:layout_marginRight="18dp"
             android:background="?android:attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onToggleNightModeClicked()}"
-            android:src="@drawable/ic_night_mode"
+            android:src="@drawable/ic_night_mode_24"
             android:tint="@color/toolbarIconColor"
             app:layout_constraintBottom_toBottomOf="@id/users_ib_add_user"
             app:layout_constraintEnd_toStartOf="@id/users_ib_add_user"

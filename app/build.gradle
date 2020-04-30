@@ -137,7 +137,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation "com.theapache64.twinkill:core:$twinkill_version"
     testImplementation "com.theapache64.twinkill:test:$twinkill_version"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'io.github.inflationx:viewpump:2.0.3' // for robolectric
     testImplementation 'io.github.inflationx:calligraphy3:3.1.1' // for robolectric
