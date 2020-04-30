@@ -56,6 +56,7 @@ class UserDetailActivityTest {
 
     @Before
     fun setUp() = runBlocking {
+
         // Add fake user
         mockDbRule.db.userDao().insert(fakeUser)
 

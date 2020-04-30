@@ -13,8 +13,9 @@ import com.theapache64.twinkill.utils.livedata.SingleLiveEvent
 import com.theapache64.twinkill.utils.test.EspressoIdlingResource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.theapache64.twinkill.utils.Resource as LocalResource
@@ -33,51 +34,57 @@ class UserDetailViewModel @Inject constructor(
     val deleteUserDialog = SingleLiveEvent<Unit>()
     val finishActivity = SingleLiveEvent<Unit>()
 
-    private val userIdChannel = ConflatedBroadcastChannel<Long>()
-    private val userChannel = ConflatedBroadcastChannel<UserEntity>()
+    private val userIdChannel = MutableLiveData<Long>()
+    private val userChannel = MutableLiveData<UserEntity>()
 
-    val events: LiveData<List<UserEvent>> = userChannel.asFlow()
-        .distinctUntilChanged()
-        .flatMapLatest { user ->
-            info("New user requesting for events")
-            eventsRepo.getUserEvents(user.username)
-        }
-        .filter { response ->
-            when (response.status) {
-                Resource.Status.LOADING -> {
-                    EspressoIdlingResource.countingIdlingResource.increment()
-                    isUserEventsVisible.set(false)
-                    _loadingView.value = LocalResource.loading(R.string.user_detail_loading_events)
-                    false
+    val events = userChannel.switchMap { user ->
+        liveData {
+            val userEvents = eventsRepo.getUserEvents(user.username)
+                .filter { response ->
+                    when (response.status) {
+                        Resource.Status.LOADING -> {
+                            EspressoIdlingResource.countingIdlingResource.increment()
+                            isUserEventsVisible.set(false)
+                            _loadingView.value =
+                                LocalResource.loading(R.string.user_detail_loading_events)
+                            false
+                        }
+                        Resource.Status.SUCCESS -> {
+                            EspressoIdlingResource.countingIdlingResource.decrement()
+                            isUserEventsVisible.set(true)
+                            _loadingView.value = LocalResource.success(null)
+                            true // only pass success
+                        }
+                        Resource.Status.ERROR -> {
+                            EspressoIdlingResource.countingIdlingResource.decrement()
+                            isUserEventsVisible.set(false)
+                            _loadingView.value = LocalResource.error(response.message!!)
+                            false
+                        }
+                    }
                 }
-                Resource.Status.SUCCESS -> {
-                    EspressoIdlingResource.countingIdlingResource.decrement()
-                    isUserEventsVisible.set(true)
-                    _loadingView.value = LocalResource.success(null)
-                    true // only pass success
-                }
-                Resource.Status.ERROR -> {
-                    EspressoIdlingResource.countingIdlingResource.decrement()
-                    isUserEventsVisible.set(false)
-                    _loadingView.value = LocalResource.error(response.message!!)
-                    false
-                }
-            }
+                .map { it.data!! }
+                .asLiveData()
+
+            emitSource(userEvents)
         }
-        .map { it.data!! }
-        .asLiveData(viewModelScope.coroutineContext)
+    }
 
 
-    val user = userIdChannel.asFlow()
-        .flatMapLatest { userId -> userRepo.getUserLocal(userId) }
-        .onEach { user ->
-            if (user != null) {
+    val user = userIdChannel.switchMap { userId ->
+        liveData {
 
-                // got user
-                userChannel.offer(user) // load user events
-            }
+            val localUser = userRepo.getUserLocal(userId)
+                .onEach { user ->
+                    if (user != null) {
+                        info("User ID is $userId and User is $user")
+                        userChannel.value = user
+                    }
+                }.asLiveData()
+
+            emitSource(localUser)
         }
-        .asLiveData(viewModelScope.coroutineContext)
+    }
 
     val isUserEventsVisible = ObservableBoolean()
 
@@ -96,7 +103,7 @@ class UserDetailViewModel @Inject constructor(
             userRepo.incrementUserScore(userId)
         }
 
-        userIdChannel.offer(userId)
+        userIdChannel.value = userId
     }
 
     fun performDeleteUser() {
