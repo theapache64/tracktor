@@ -28,10 +28,10 @@ GitHub's feed, since it shows only minimal information about the person you foll
 ## How to use? 🤔
 
 - Install the latest APK from [releases](https://github.com/theapache64/tracktor/releases) 📥
-- Add to list by enter GitHub `username`
+- Add him/her to the list by entering the GitHub `username`
 - Done 👍
 
-*Now you can see whatever he do including his last know activity*
+*Now you can see whatever he does 😜* 
 
 ## Built With 🛠
 
@@ -55,7 +55,7 @@ GitHub's feed, since it shows only minimal information about the person you foll
 - [MaterialColors](https://github.com/theapache64/material_colors) - Android material color palettes
 - [Material Dialogs](https://github.com/afollestad/material-dialogs) - A beautiful, fluid, and extensible dialogs API for Kotlin & Android.
 
-### Unit Testing 🥼
+### Testing 🥼
 
 - [JUnit](https://github.com/junit-team/junit4) - A programmer-oriented testing framework for Java
 - [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
@@ -64,6 +64,7 @@ GitHub's feed, since it shows only minimal information about the person you foll
 - [Android Arch Testing](https://developer.android.com/jetpack/androidx/releases/arch) - To test android architectural components
 - [Kotlin Coroutines Test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) - Testing utilities for effectively testing coroutines.
 - [Robolectric](https://github.com/robolectric/robolectric) - Android Unit Testing Framework
+- [DaggerMock](https://github.com/fabioCollini/DaggerMock) - A JUnit rule to easily override Dagger 2 objects
 
 ### Instrumentation Testing 🛡️
 
