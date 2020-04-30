@@ -1,6 +1,7 @@
 package com.theapache64.tracktor.ui.activities.users
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
@@ -11,11 +12,11 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertN
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions.sleep
 import com.theapache64.tracktor.R
 import com.theapache64.tracktor.data.local.entities.UserEntity
 import com.theapache64.tracktor.ui.activities.userdetail.UserDetailActivity
 import com.theapache64.tracktor.utils.DaggerMockDbRule
-import com.theapache64.tracktor.utils.test.watchIntent
 import com.theapache64.twinkill.utils.test.IdlingRule
 import com.theapache64.twinkill.utils.test.monitorActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -60,7 +61,7 @@ class UsersActivityTest {
         val validUsername = "theapache64"
 
         // Adding user
-        clickOn(R.id.ib_add_user)
+        clickOn(R.id.users_ib_add_user)
         writeTo(R.id.md_input_message, validUsername)
         clickOn(android.R.string.ok)
 
@@ -74,7 +75,7 @@ class UsersActivityTest {
         val invalidUsername = "458734857dfkjfgskdj"
 
         // Adding invalid user
-        clickOn(R.id.ib_add_user)
+        clickOn(R.id.users_ib_add_user)
         writeTo(R.id.md_input_message, invalidUsername)
         clickOn(android.R.string.ok)
 
@@ -97,15 +98,15 @@ class UsersActivityTest {
 
         mockDbRule.db.userDao().insert(fakeUser)
 
-        watchIntent {
-            clickListItem(R.id.users_rv_users, 0)
-            intended(
-                allOf(
-                    hasComponent(UserDetailActivity::class.java.name),
-                    hasExtra(UserDetailActivity.KEY_USER_ID, fakeUser.id)
-                )
+        Intents.init()
+        clickListItem(R.id.users_rv_users, 0)
+        intended(
+            allOf(
+                hasComponent(UserDetailActivity::class.java.name),
+                hasExtra(UserDetailActivity.KEY_USER_ID, fakeUser.id)
             )
-        }
+        )
+        Intents.release()
     }
 
     @Test
@@ -129,4 +130,18 @@ class UsersActivityTest {
         assertDisplayed(R.id.users_tv_no_user) // show no user text view
     }
 
+    @Test
+    fun givenAddNewUser_whenGoToNextActivityAndGC_thenNoSnackBarDisplayed() = runBlocking {
+
+        clickOn(R.id.users_ib_add_user)
+        val username = "theapache64"
+        writeTo(R.id.md_input_message, username)
+        clickOn(android.R.string.ok)
+
+        clickListItem(R.id.users_rv_users, 0)
+        sleep(10_000)
+        System.gc()
+        clickOn(R.id.user_detail_ib_action_go_back)
+        assertNotDisplayed("$username already exist")
+    }
 }

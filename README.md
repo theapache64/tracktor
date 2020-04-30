@@ -1,4 +1,4 @@
-# tracktor 🐶
+# tracktor 🕵️
 
 A GitHub user tracking app, inspired from the below GIF 🤷
 <p align="center">

@@ -26,8 +26,6 @@ class UsersViewModel @Inject constructor(
     private val userRepo: UserRepo
 ) : BaseViewModel() {
 
-    class AddUserRequest(val username: String)
-
     companion object {
         const val STATUS_INVALID_USER = 321
         private const val STATUS_USER_EXIST = 123
@@ -37,21 +35,27 @@ class UsersViewModel @Inject constructor(
     val isNoUserVisible = ObservableBoolean()
     val isUsersVisible = ObservableBoolean()
 
-    val onAddUserChannel = ConflatedBroadcastChannel<AddUserRequest>()
+    val onAddUserChannel = ConflatedBroadcastChannel<String>()
     val addUserResponse = onAddUserChannel.asFlow()
-        .distinctUntilChanged()
-        .flatMapLatest { request ->
+        .distinctUntilChanged { old: String, new: String ->
+            val isEqual = old == new
+            println("OLD : `$old`, NEW: `$new`, isEqual : `$isEqual`")
+            isEqual
+        }
+        .flatMapLatest { username ->
+
             EspressoIdlingResource.countingIdlingResource.increment()
+            info("Checking for add new user... $username")
 
             // Checking if the user already exist in db
-            val dbUser = userRepo.getUserLocal(request.username)
+            val dbUser = userRepo.getUserLocal(username)
 
             if (dbUser != null) {
                 // exist in db
-                flowOf(Resource.error("${request.username} already exist", STATUS_USER_EXIST))
+                flowOf(Resource.error("$username already exist", STATUS_USER_EXIST))
             } else {
                 // not exist in db
-                userRepo.getUserRemote(request.username)
+                userRepo.getUserRemote(username)
             }
 
         }
@@ -133,7 +137,8 @@ class UsersViewModel @Inject constructor(
     }
 
     fun addUser(username: String) {
-        onAddUserChannel.offer(AddUserRequest(username))
+        info("Calling add new user")
+        onAddUserChannel.offer(username)
     }
 
 }
