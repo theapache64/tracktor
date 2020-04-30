@@ -11,6 +11,8 @@
 
 A GitHub user tracking app, inspired from the below GIF 🤷
 
+*Can be considered as a demo project to showcase MVVM with latest android development tools*
+
 <p align="center">
 <img src="extras/dog_stalks_cat.gif"/>
 </p>
