@@ -2,6 +2,7 @@ package com.theapache64.tracktor.di.components
 
 import com.theapache64.tracktor.App
 import com.theapache64.tracktor.di.modules.*
+import com.theapache64.twinkill.di.modules.PreferenceModule
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,8 @@ import javax.inject.Singleton
         DatabaseModule::class,
         ViewModelModule::class,
         ActivitiesBuilderModule::class,
-        RepoModule::class
+        RepoModule::class,
+        PreferenceModule::class
     ]
 )
 interface AppComponent {

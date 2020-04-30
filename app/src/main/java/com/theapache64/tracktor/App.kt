@@ -2,7 +2,9 @@ package com.theapache64.tracktor
 
 
 import android.app.Application
+import com.theapache64.tracktor.data.repositories.PrefRepo
 import com.theapache64.tracktor.di.components.DaggerAppComponent
+import com.theapache64.tracktor.utils.NightModeUtils
 import com.theapache64.twinkill.TwinKill
 import com.theapache64.twinkill.di.modules.ContextModule
 import com.theapache64.twinkill.googlesans.GoogleSans
@@ -12,8 +14,10 @@ import com.theapache64.twinkill.network.utils.retrofit.interceptors.CurlIntercep
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class App : Application(), HasAndroidInjector {
 
     companion object {
@@ -22,6 +26,9 @@ class App : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    @Inject
+    lateinit var prefRepo: PrefRepo
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
@@ -46,6 +53,7 @@ class App : Application(), HasAndroidInjector {
                 .build()
         )
 
+        NightModeUtils.setNightModeEnabled(prefRepo.isNightModeEnabled())
     }
 
 }

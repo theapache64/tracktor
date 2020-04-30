@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.theapache64.tracktor.R
 import com.theapache64.tracktor.data.local.entities.UserEntity
 import com.theapache64.tracktor.data.remote.user.User
+import com.theapache64.tracktor.data.repositories.PrefRepo
 import com.theapache64.tracktor.data.repositories.UserRepo
 import com.theapache64.twinkill.logger.info
 import com.theapache64.twinkill.network.utils.Resource
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @FlowPreview
 @ExperimentalCoroutinesApi
 class UsersViewModel @Inject constructor(
-    private val userRepo: UserRepo
+    private val userRepo: UserRepo,
+    private val prefRepo: PrefRepo
 ) : BaseViewModel() {
 
     companion object {
@@ -134,6 +136,15 @@ class UsersViewModel @Inject constructor(
     fun addUser(username: String) {
         info("Calling add new user")
         onAddUserChannel.value = username
+    }
+
+    private val _nightMode = MutableLiveData<Boolean>()
+    val nightMode: LiveData<Boolean> = _nightMode
+
+    fun onToggleNightModeClicked() {
+        val isNightModeEnabled = prefRepo.isNightModeEnabled()
+        _nightMode.value = !isNightModeEnabled
+        prefRepo.setNightModeEnabled(!isNightModeEnabled)
     }
 
 }
