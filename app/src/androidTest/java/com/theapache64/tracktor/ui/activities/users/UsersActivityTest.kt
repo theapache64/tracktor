@@ -139,7 +139,7 @@ class UsersActivityTest {
         clickOn(android.R.string.ok)
 
         clickListItem(R.id.users_rv_users, 0)
-        sleep(10_000)
+        sleep(5_000)
         System.gc()
         clickOn(R.id.user_detail_ib_action_go_back)
         assertNotDisplayed("$username already exist")
