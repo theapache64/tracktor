@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.theapache64.tracktor.data.remote.user.User
+import com.theapache64.tracktor.data.repositories.PrefRepo
 import com.theapache64.tracktor.data.repositories.UserRepo
 import com.theapache64.tracktor.utils.test.observeForTesting
 import com.theapache64.twinkill.network.utils.Resource
@@ -44,7 +45,7 @@ class UsersViewModelTest {
 
         val fakeUserRepo: UserRepo = mock()
         whenever(fakeUserRepo.getUsers()).thenReturn(flowOf(listOf())) // empty db list
-        val userViewModel = UsersViewModel(fakeUserRepo)
+        val userViewModel = UsersViewModel(fakeUserRepo, mock())
         userViewModel.addUserClick.value.should.`null`
         userViewModel.onAddUserClicked()
         userViewModel.addUserClick.getOrAwaitValue().should.`true`
@@ -63,7 +64,7 @@ class UsersViewModelTest {
             emit(Resource.error("Invalid user", UsersViewModel.STATUS_INVALID_USER))
         }) // empty list
 
-        val userViewModel = UsersViewModel(fakeUserRepo)
+        val userViewModel = UsersViewModel(fakeUserRepo, mock())
 
         // when : Calling subject -> givenNewUsername
         userViewModel.addUser(invalidUsername)
@@ -100,7 +101,7 @@ class UsersViewModelTest {
             emit(Resource.success(newFakeUser, -1))
         }) // empty list
 
-        val userViewModel = UsersViewModel(fakeUserRepo)
+        val userViewModel = UsersViewModel(fakeUserRepo, mock())
 
         // when : Calling subject -> givenNewUsername
         userViewModel.addUser(validUsername)
@@ -116,6 +117,30 @@ class UsersViewModelTest {
 
             verify(fakeUserRepo).saveUser(any())
         }
+    }
+
+    @Test
+    fun givenNightMode_whenToggleNightModeClicked_thenNightModeChanged() {
+
+        val fakePrefRepo: PrefRepo = mock()
+        whenever(fakePrefRepo.isNightModeEnabled()).thenReturn(true)
+
+        val userViewModel = UsersViewModel(mock(), fakePrefRepo)
+
+        // Default
+        userViewModel.nightMode.value.should.`null`
+
+        // Toggle
+        userViewModel.onToggleNightModeClicked()
+
+        // Checking
+        verify(fakePrefRepo).isNightModeEnabled()
+
+        // Change
+        userViewModel.nightMode.value.should.be.`false`
+
+        // Save
+        verify(fakePrefRepo).setNightModeEnabled(false)
     }
 
 

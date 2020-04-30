@@ -2,11 +2,11 @@ package com.theapache64.tracktor.ui.activities.users
 
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.theapache64.tracktor.R
 import com.theapache64.tracktor.data.local.entities.UserEntity
+import com.theapache64.tracktor.data.remote.user.User
+import com.theapache64.tracktor.data.repositories.PrefRepo
 import com.theapache64.tracktor.data.repositories.UserRepo
 import com.theapache64.twinkill.logger.info
 import com.theapache64.twinkill.network.utils.Resource
@@ -15,18 +15,16 @@ import com.theapache64.twinkill.utils.livedata.SingleLiveEvent
 import com.theapache64.twinkill.utils.test.EspressoIdlingResource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class UsersViewModel @Inject constructor(
-    private val userRepo: UserRepo
+    private val userRepo: UserRepo,
+    private val prefRepo: PrefRepo
 ) : BaseViewModel() {
-
-    class AddUserRequest(val username: String)
 
     companion object {
         const val STATUS_INVALID_USER = 321
@@ -37,79 +35,82 @@ class UsersViewModel @Inject constructor(
     val isNoUserVisible = ObservableBoolean()
     val isUsersVisible = ObservableBoolean()
 
-    val onAddUserChannel = ConflatedBroadcastChannel<AddUserRequest>()
-    val addUserResponse = onAddUserChannel.asFlow()
-        .distinctUntilChanged()
-        .flatMapLatest { request ->
+    val onAddUserChannel = MutableLiveData<String>()
+    val addUserResponse = onAddUserChannel.switchMap { username ->
+        liveData<Resource<User>> {
+
             EspressoIdlingResource.countingIdlingResource.increment()
+            info("Checking for add new user... $username")
 
             // Checking if the user already exist in db
-            val dbUser = userRepo.getUserLocal(request.username)
+            val dbUser = userRepo.getUserLocal(username)
 
             if (dbUser != null) {
                 // exist in db
-                flowOf(Resource.error("${request.username} already exist", STATUS_USER_EXIST))
+                EspressoIdlingResource.countingIdlingResource.decrement()
+                emit(Resource.error("$username already exist", STATUS_USER_EXIST))
             } else {
                 // not exist in db
-                userRepo.getUserRemote(request.username)
+                val remoteUsername = userRepo.getUserRemote(username)
+                    .onEach {
+
+                        when (it.status) {
+
+                            Resource.Status.LOADING -> {
+                                isNoUserVisible.set(false)
+                                isUsersVisible.set(false)
+                            }
+
+                            Resource.Status.SUCCESS -> {
+
+                                EspressoIdlingResource.countingIdlingResource.decrement()
+
+                                // a valid user collected from network, so add it to the db
+                                val newUserEntity = it.data!!.let { user ->
+                                    UserEntity(
+                                        user.login,
+                                        user.avatarUrl,
+                                        user.type,
+                                        user.name
+                                    )
+                                }
+
+                                userRepo.saveUser(newUserEntity)
+
+                                isNoUserVisible.set(false)
+                                isUsersVisible.set(true)
+                            }
+
+                            Resource.Status.ERROR -> {
+
+                                EspressoIdlingResource.countingIdlingResource.decrement()
+
+                                val msg: Any = if (it.statusCode == 404) {
+                                    R.string.users_error_invalid_user
+                                } else {
+                                    it.message!!
+                                }
+
+                                snackBarMessage.postValue(msg)
+
+                                val isUsersEmpty = users.value?.isEmpty() ?: true
+                                if (isUsersEmpty) {
+                                    // no users
+                                    isUsersVisible.set(false)
+                                    isNoUserVisible.set(true)
+                                } else {
+                                    isUsersVisible.set(true)
+                                    isNoUserVisible.set(false)
+                                }
+                            }
+                        }
+                    }
+                    .asLiveData()
+
+                emitSource(remoteUsername)
             }
-
         }
-        .onEach {
-            when (it.status) {
-
-                Resource.Status.LOADING -> {
-                    isNoUserVisible.set(false)
-                    isUsersVisible.set(false)
-                }
-
-                Resource.Status.SUCCESS -> {
-
-                    EspressoIdlingResource.countingIdlingResource.decrement()
-
-                    // a valid user collected from network, so add it to the db
-                    val newUserEntity = it.data!!.let { user ->
-                        UserEntity(
-                            user.login,
-                            user.avatarUrl,
-                            user.type,
-                            user.name
-                        )
-                    }
-
-                    userRepo.saveUser(newUserEntity)
-
-                    isNoUserVisible.set(false)
-                    isUsersVisible.set(true)
-                }
-
-                Resource.Status.ERROR -> {
-
-                    if (!EspressoIdlingResource.countingIdlingResource.isIdleNow) {
-                        EspressoIdlingResource.countingIdlingResource.decrement()
-                    }
-
-                    val msg: Any = if (it.statusCode == 404) {
-                        R.string.users_error_invalid_user
-                    } else {
-                        it.message!!
-                    }
-
-                    snackBarMessage.postValue(msg)
-
-                    val isUsersEmpty = users.value?.isEmpty() ?: true
-                    if (isUsersEmpty) {
-                        // no users
-                        isUsersVisible.set(false)
-                        isNoUserVisible.set(true)
-                    } else {
-                        isUsersVisible.set(true)
-                        isNoUserVisible.set(false)
-                    }
-                }
-            }
-        }
-        .asLiveData()
+    }
 
     val users = userRepo.getUsers()
         .onEach {
@@ -133,7 +134,17 @@ class UsersViewModel @Inject constructor(
     }
 
     fun addUser(username: String) {
-        onAddUserChannel.offer(AddUserRequest(username))
+        info("Calling add new user")
+        onAddUserChannel.value = username
+    }
+
+    private val _nightMode = MutableLiveData<Boolean>()
+    val nightMode: LiveData<Boolean> = _nightMode
+
+    fun onToggleNightModeClicked() {
+        val isNightModeEnabled = prefRepo.isNightModeEnabled()
+        _nightMode.value = !isNightModeEnabled
+        prefRepo.setNightModeEnabled(!isNightModeEnabled)
     }
 
 }

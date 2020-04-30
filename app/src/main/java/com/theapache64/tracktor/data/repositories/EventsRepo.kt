@@ -9,7 +9,9 @@ import com.theapache64.twinkill.network.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class EventsRepo @Inject constructor(
     private val moshi: Moshi,
     private val apiInterface: ApiInterface

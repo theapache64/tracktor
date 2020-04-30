@@ -15,6 +15,7 @@ import com.theapache64.tracktor.data.local.entities.UserEntity
 import com.theapache64.tracktor.databinding.ActivityUsersBinding
 import com.theapache64.tracktor.ui.activities.userdetail.UserDetailActivity
 import com.theapache64.tracktor.ui.adapters.UsersAdapter
+import com.theapache64.tracktor.utils.NightModeUtils
 import com.theapache64.twinkill.network.utils.Resource
 import com.theapache64.twinkill.ui.activities.base.BaseAppCompatActivity
 import com.theapache64.twinkill.utils.extensions.bindContentView
@@ -82,7 +83,10 @@ class UsersActivity : BaseAppCompatActivity() {
             }
         })
 
-        // Watching no user
+        // Watching for night mode
+        viewModel.nightMode.observe(this, Observer { isNightModeEnabled ->
+            NightModeUtils.setNightModeEnabled(isNightModeEnabled)
+        })
 
         // Watching all users
         viewModel.users.observe(this, Observer { users ->

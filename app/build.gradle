@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
     id "org.jetbrains.kotlin.plugin.allopen" version "$kotlin_version"
 }
 
@@ -20,7 +19,14 @@ android {
         versionName "1.0.0-alpha01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -131,9 +137,9 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation "com.theapache64.twinkill:core:$twinkill_version"
     testImplementation "com.theapache64.twinkill:test:$twinkill_version"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'io.github.inflationx:viewpump:2.0.3' // for robolectric
+    testImplementation 'io.github.inflationx:calligraphy3:3.1.1' // for robolectric
     implementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
 
 

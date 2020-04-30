@@ -6,10 +6,14 @@ import com.theapache64.tracktor.ui.activities.userdetail.UserDetailActivity
 import com.theapache64.tracktor.ui.activities.users.UsersActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 /**
  * To hold activities to support AndroidInjection call from dagger.
  */
+@FlowPreview
+@ExperimentalCoroutinesApi
 @Module
 abstract class ActivitiesBuilderModule {
 
