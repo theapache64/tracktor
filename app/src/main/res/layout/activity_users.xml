@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".UsersActivity">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_dialog_email" />
-
-        <include
-            android:id="@+id/i_content_users"
-            layout="@layout/content_users"
-            bind:handler="@{handler}"
-            bind:viewModel="@{viewModel}" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
 
@@ -45,8 +9,82 @@
             name="viewModel"
             type="com.theapache64.tracktor.ui.activities.users.UsersViewModel" />
 
-        <variable
-            name="handler"
-            type="com.theapache64.tracktor.ui.activities.users.UsersHandler" />
+        <import type="android.view.View" />
+
     </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activities.users.UsersActivity">
+
+        <!--title-->
+        <TextView
+            android:id="@+id/tv_title"
+            fontPath="fonts/GoogleSans-Bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="18dp"
+            android:text="@string/app_name"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--Add user-->
+        <ImageButton
+            android:id="@+id/ib_add_user"
+            android:layout_width="@dimen/toolbar_icon_wh"
+            android:layout_height="@dimen/toolbar_icon_wh"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onAddUserClicked()}"
+            android:src="@drawable/ic_baseline_add_24"
+            android:tint="@color/toolbarIconColor"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            tools:ignore="ContentDescription" />
+
+        <!--Users-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_rv_users"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:visibility="@{viewModel.isUsersVisible ? View.VISIBLE :View.GONE}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:spanCount="2"
+            tools:listitem="@layout/item_user" />
+
+        <com.theapache64.twinkill.ui.widgets.LoadingView
+            android:id="@+id/lv_add_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!--No user-->
+        <TextView
+            android:id="@+id/users_tv_no_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/users_tap_plus_to_add_user"
+            android:visibility="@{viewModel.isNoUserVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

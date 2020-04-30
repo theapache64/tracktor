@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.theapache64.tracktor.utils.DateTimeUtils" />
+
+        <variable
+            name="user"
+            type="com.theapache64.tracktor.data.local.entities.UserEntity" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        tools:layout_width="180dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--Image View-->
+            <ImageView
+                android:id="@+id/iv_item_user_avatar"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{user.avatarUrl}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/sample_user_avatar" />
+
+            <!--Name-->
+            <TextView
+                android:id="@+id/tv_item_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@{user.name}"
+                android:textColor="@color/primaryTextColor"
+                android:transitionName="user_name"
+                app:layout_constraintStart_toStartOf="@id/iv_item_user_avatar"
+                app:layout_constraintTop_toBottomOf="@id/iv_item_user_avatar"
+                tools:targetApi="lollipop"
+                tools:text="theapache64" />
+
+            <!--Last activity-->
+            <TextView
+                android:id="@+id/tv_item_user_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@{user.username}"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_item_user_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_item_user_name"
+                tools:text="5 minutes ago" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

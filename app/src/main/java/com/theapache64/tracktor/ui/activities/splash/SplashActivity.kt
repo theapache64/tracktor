@@ -2,7 +2,6 @@ package com.theapache64.tracktor.ui.activities.splash
 
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.theapache64.tracktor.R
@@ -11,6 +10,8 @@ import com.theapache64.tracktor.ui.activities.users.UsersActivity
 import com.theapache64.twinkill.ui.activities.base.BaseAppCompatActivity
 import com.theapache64.twinkill.utils.extensions.bindContentView
 import dagger.android.AndroidInjection
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
 
 class SplashActivity : BaseAppCompatActivity() {
@@ -18,6 +19,8 @@ class SplashActivity : BaseAppCompatActivity() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -27,9 +30,10 @@ class SplashActivity : BaseAppCompatActivity() {
         binding.viewModel = viewModel
 
         // Watching activity launch command
-        viewModel.getLaunchActivityEvent().observe(this, Observer { activityName ->
+        viewModel.launchActivityEvent.observe(this, Observer { activityName ->
 
             when (activityName) {
+
                 UsersActivity::class.simpleName -> {
                     startActivity(UsersActivity.getStartIntent(this))
                 }
@@ -38,19 +42,7 @@ class SplashActivity : BaseAppCompatActivity() {
             }
 
             finish()
-
         })
-
-        // Starting splash timer
-        Handler().postDelayed({
-            viewModel.goToNextScreen()
-        }, SPLASH_DURATION)
-
-    }
-
-
-    companion object {
-        private const val SPLASH_DURATION = 1000L
     }
 
 }

@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Tracktor</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add_user">Add User</string>
+    <string name="users_hint_username">Username</string>
+    <string name="users_dialog_title_add_user">Add User</string>
+    <string name="users_dialog_message_add_user">Enter username of the person you want to track</string>
+    <string name="users_tap_plus_to_add_user">Tap the ➕ to add a user</string>
+    <string name="users_finding_user">Finding user...</string>
+    <string name="users_error_invalid_user">Invalid user</string>
+    <string name="user_detail_dialog_title_delete_user">Delete</string>
+    <string name="user_detail_dialog_message_delete_user">Do you really want to delete this user ?</string>
+    <string name="action_cancel">CANCEL</string>
+    <string name="user_detail_loading_events">Loading events...</string>
+    <string name="user_detail_event_detail_key_repo">Repo</string>
+    <string name="user_detail_event_detail_key_action">Action</string>
+    <string name="user_detail_event_detail_key_commit_count">Commit count</string>
+    <string name="user_detail_event_detail_key_commit">commit</string>
+    <string name="user_detail_event_detail_key_comment">Comment</string>
 
 
 </resources>

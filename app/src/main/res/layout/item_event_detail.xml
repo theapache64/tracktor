@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="eventDetail"
+            type="com.theapache64.tracktor.models.UserEvent.Detail" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/tv_item_event_detail_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@{eventDetail.key}"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="13sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_item_event_detail_value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Action" />
+
+
+        <TextView
+            android:id="@+id/item_event_detail_tv_colon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text=":"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_event_detail_key"
+            app:layout_constraintEnd_toStartOf="@id/tv_item_event_detail_value"
+            app:layout_constraintStart_toEndOf="@id/tv_item_event_detail_key" />
+
+        <TextView
+            android:id="@+id/tv_item_event_detail_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@{eventDetail.value}"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/item_event_detail_tv_colon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_event_detail_tv_colon"
+            tools:text="Opened" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

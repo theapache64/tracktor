@@ -7,9 +7,7 @@ import com.theapache64.twinkill.TwinKill
 import com.theapache64.twinkill.di.modules.ContextModule
 import com.theapache64.twinkill.googlesans.GoogleSans
 import com.theapache64.twinkill.network.di.modules.BaseNetworkModule
-import com.theapache64.twinkill.network.utils.retrofit.adapters.resourcedataadapter.ResourceCallAdapter
-import com.theapache64.twinkill.network.utils.retrofit.adapters.resourcedataadapter.ResourceCallAdapterFactory
-import com.theapache64.twinkill.network.utils.retrofit.interceptors.AuthorizationInterceptor
+import com.theapache64.twinkill.network.utils.retrofit.adapters.flow.FlowResourceCallAdapterFactory
 import com.theapache64.twinkill.network.utils.retrofit.interceptors.CurlInterceptor
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -19,7 +17,7 @@ import javax.inject.Inject
 class App : Application(), HasAndroidInjector {
 
     companion object {
-        private const val BASE_URL = "https://api.github.com/"
+        const val BASE_URL = "https://api.github.com/"
     }
 
     @Inject
@@ -42,11 +40,8 @@ class App : Application(), HasAndroidInjector {
         TwinKill.init(
             TwinKill
                 .builder()
-
-                .addCallAdapter(ResourceCallAdapterFactory(true))
+                .addCallAdapter(FlowResourceCallAdapterFactory())
                 .addOkHttpInterceptor(CurlInterceptor())
-
-
                 .setDefaultFont(GoogleSans.Regular)
                 .build()
         )
