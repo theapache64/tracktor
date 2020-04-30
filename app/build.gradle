@@ -20,7 +20,14 @@ android {
         versionName "1.0.0-alpha01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
