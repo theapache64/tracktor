@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotExist
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
@@ -51,8 +52,8 @@ class UsersActivityTest {
 
     @After
     fun after() {
-        ac.close()
         mockDbRule.db.close()
+        ac.close()
     }
 
     @Test
@@ -97,7 +98,7 @@ class UsersActivityTest {
         }
 
         mockDbRule.db.userDao().insert(fakeUser)
-
+        sleep(2_000)
         Intents.init()
         clickListItem(R.id.users_rv_users, 0)
         intended(
@@ -123,6 +124,8 @@ class UsersActivityTest {
         }
 
         mockDbRule.db.userDao().insert(fakeUser)
+        sleep(2_000)
+
         clickListItem(R.id.users_rv_users, 0) // click
         clickOn(R.id.user_detail_ib_action_delete_user) // delete
         clickOn(R.string.action_yes) // confirm
@@ -142,6 +145,6 @@ class UsersActivityTest {
         sleep(5_000)
         System.gc()
         clickOn(R.id.user_detail_ib_action_go_back)
-        assertNotDisplayed("$username already exist")
+        assertNotExist("$username already exist")
     }
 }
