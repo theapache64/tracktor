@@ -7,9 +7,9 @@
 [![GitHub forks](https://img.shields.io/github/forks/theapache64/tracktor)](https://github.com/theapache64/tracktor/network)
 [![GitHub stars](https://img.shields.io/github/stars/theapache64/tracktor)](https://github.com/theapache64/tracktor/stargazers)
 [![GitHub license](https://img.shields.io/github/license/theapache64/tracktor)](https://github.com/theapache64/tracktor/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Ftheapache64%2Ftracktor)
+[![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=Wow,%20Checkout%20this%20repo%20https%3A%2F%2Fgithub.com%2Ftheapache64%2Ftracktor)
 
-A GitHub user tracking app, inspired from the below GIF 🤷
+A GitHub user tracking app, inspired from below GIF 🤷
 
 *Can be considered as a demo project to showcase MVVM with latest android development tools*
 
