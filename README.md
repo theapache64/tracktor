@@ -9,7 +9,7 @@
 [![GitHub license](https://img.shields.io/github/license/theapache64/tracktor)](https://github.com/theapache64/tracktor/blob/master/LICENSE)
 [![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=Wow,%20Checkout%20this%20repo%20https%3A%2F%2Fgithub.com%2Ftheapache64%2Ftracktor)
 
-A GitHub user tracking app, inspired from below GIF 🤷
+If you've got someone you truly admire for their fiery passion in programming, hitting that 'follow' button on GitHub might not be enough. Don't settle for the minimal info on your feed! That's where this app comes in 😉
 
 *Can be considered as a demo project to showcase MVVM with latest android development tools*
 
@@ -20,11 +20,6 @@ A GitHub user tracking app, inspired from below GIF 🤷
 ## Dark Mode Available 🌙
 
 ![dark_screenshots](extras/night_montage.png)
-
-## Usage 📱
-
-There's this person. You admire him a lot because he's a very passionate programmer. You press the  **follow** button but you're not satisfied with
-GitHub's feed, since it shows only minimal information about the person you follow. Then this app is for you 😉
 
 
 ## How to use? 🤔
